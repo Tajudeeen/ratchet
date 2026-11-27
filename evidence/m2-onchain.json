@@ -1,0 +1,78 @@
+{
+  "network": "aevum",
+  "chainId": 44005,
+  "ratchet": "0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36",
+  "tusd8": "0x456569838f1d43009A91ebA4263147Afd7233483",
+  "deployTx": "0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e",
+  "owner": "0x541291139b59570D1CD5D0E64df217b3F6efd7c8",
+  "agent": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "agent2": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+  "payee": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+  "steps": [
+    {
+      "step": "FUND",
+      "result": "SUCCESS",
+      "hash": "0x242aa33ee14300089b6e9d2b1588e0196401ce17c45dd333e1067700e185e80c",
+      "block": 4242937
+    },
+    {
+      "step": "GRANT_1",
+      "result": "SUCCESS",
+      "hash": "0x693a7f44d21a4b7640d43ddf96794d78d583951e01e1c60bab743332127555dd",
+      "block": 4242943
+    },
+    {
+      "step": "GRANT_2",
+      "result": "SUCCESS",
+      "hash": "0xc430808213be0c6a1593c3390bb73e5903687315126121c78072f4185dec39af",
+      "block": 4242949
+    },
+    {
+      "step": "APPROVE_1",
+      "result": "SUCCESS",
+      "hash": "0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec",
+      "block": 4242954
+    },
+    {
+      "step": "APPROVE_2",
+      "result": "SUCCESS",
+      "hash": "0xc15bdc5c3e3a44bcea40bd4f067279ac2913179384b510b567f611577c170c61",
+      "block": 4242959
+    },
+    {
+      "step": "BLOCK_DUP_ID",
+      "result": "BLOCK",
+      "reason": "execution reverted"
+    },
+    {
+      "step": "REVOKE_1",
+      "result": "SUCCESS",
+      "hash": "0x4333b25293fad52e487e1b77694e8c01dff4735953b675ea2a0119fa0577ebba",
+      "block": 4242966
+    },
+    {
+      "step": "BLOCK_REVOKED",
+      "result": "BLOCK",
+      "reason": "execution reverted"
+    },
+    {
+      "step": "GRANT_3",
+      "result": "SUCCESS",
+      "hash": "0x07b3b452e041b99a410deffee4508af2b0b86fe4e88c30b10cd54efe17cdcf9d",
+      "block": 4242972
+    },
+    {
+      "step": "DRAIN",
+      "result": "SUCCESS",
+      "hash": "0xe0c498828b1f8efb6d07c88ff51f5de5550a39ac079ac0817415dc06a1b31bd4",
+      "block": 4242977
+    },
+    {
+      "step": "BLOCK_EMPTY",
+      "result": "BLOCK",
+      "reason": "execution reverted"
+    }
+  ],
+  "remaining": "0",
+  "payeeBalance": "2680000"
+}

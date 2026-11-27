@@ -18,9 +18,21 @@ A ratchet only turns one way: every `spend()` clicks the shared budget down one 
 - tUSD8 at `0x456569838f1d43009A91ebA4263147Afd7233483`, `decimals()` = 6 (eth_call).
 - Explorer `https://explorer-test.qday.info/`, faucet `https://faucet.qday.info/en`.
 
+**VERIFIED — LIVE ON-CHAIN (2026-11-27):**
+- Ratchet deployed to Aevum chain 44005 at `0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36`
+  — deploy tx `0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e`
+  (receipt status 0x1, block 0x40bd70; code 4095 bytes; `token()` = tUSD8,
+  `owner()` = 0x5412...7c8).
+- Live proof sequence (`evidence/m2-onchain.json`): FUND, GRANT x3, APPROVE x2,
+  REVOKE, DRAIN all succeeded; BLOCK_DUP_ID, BLOCK_REVOKED, BLOCK_EMPTY all reverted
+  on-chain. Final `remainingBudget()` = 0; payee received 2.68 tUSD8.
+- Explorer: https://explorer-test.qday.info/address/0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36
+
 **NOT VERIFIED YET — DO NOT CLAIM:**
-- No contract deployed to Aevum yet. No tx hashes. No mainnet claim.
-- Explorer contract verifier is broken upstream — will publish address + exact commit instead.
+- No UI/CLI verifier yet (M3 pending). Demo video not recorded.
+- Explorer contract verifier is broken upstream — source is pinned by commit hash here.
+- No mainnet deployment; no production claim. The test wallets used in the proof are
+  throwaway. The deployer key was pasted in a chat once — rotate that wallet after the event.
 
 ## Problem
 
