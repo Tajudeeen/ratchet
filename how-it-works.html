@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How it works — Ratchet</title>
+<link rel="stylesheet" href="/shared.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main class="wrap" style="padding-top:46px">
+  <p class="eyebrow">Mechanism · for readers who do not know our stack</p>
+  <h1>How a budget<br>stops being a suggestion.</h1>
+
+  <div class="panel" style="margin:30px 0">
+    <h2>The problem, in plain language</h2>
+    <p>When an AI agent pays for an API, the operator often writes a rule like “never spend more than twenty dollars.” That sentence lives in a prompt. It has no effect on the chain. The agent can exceed it, or expand its own authority. If two agents share one wallet, each can spend the same remaining balance. If a request times out and the agent retries, it can pay twice.</p>
+    <p class="mono" style="font-size:.8rem;color:var(--muted)">Evidence: Circle, <em>How AI Agents Hold and Spend Money</em>, 19 Nov 2026 — “A prompt that says ‘stay within budget’ expresses intent, but nothing enforces it.” Full citation on the <a href="/proof.html">proof page</a>.</p>
+  </div>
+
+  <h2>The mechanism</h2>
+  <div class="grid-2">
+    <div class="panel">
+      <p class="eyebrow">01 · Fund once</p>
+      <p>The owner transfers tUSD8 into one contract. That is the shared pot. It is not a wallet the agent holds.</p>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">02 · Grant a session</p>
+      <p>The owner binds an agent key to a per-call cap, a total cap, a validity window and an optional payee allowlist. Only the owner can create or change a session.</p>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">03 · Spend, atomically</p>
+      <p>The agent signs an EIP-712 payment with a unique payment ID. The contract checks the signature, caps, window, allowlist and shared balance in one transaction, then transfers the tokens.</p>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">04 · Ratchet down</p>
+      <p>Every payment decrements the single shared pot and cannot increment it. A repeated payment ID is rejected. The owner can revoke a session instantly; the next payment fails closed.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+  <h2>What the judge can verify</h2>
+  <p>Four beats, all visible on-chain: two payments <span class="tag ok">approve</span>, a budget-exhaustion <span class="tag block">block</span>, a duplicate-ID <span class="tag block">block</span>, and a revocation <span class="tag block">block</span>. Every successful step has a transaction hash and explorer link; every block has a named custom error. The <a href="/proof.html">proof page</a> lists them, and <code>node scripts/verify.cjs &lt;txHash&gt;</code> reproduces the claim from a fresh clone.</p>
+
+  <div class="note">Scope boundaries we state before you ask: this is a testnet build with no mainnet deployment. The off-chain verifier is a convenience caller, not the security boundary — all enforcement happens inside the contract. The explorer's source verifier is broken on Aevum, so source identity is pinned by a public repo and exact commit. No external audit has been performed.</div>
+
+  <h2>Why not just an escrow contract?</h2>
+  <p>Two other projects were already built in this challenge window around invoice escrow and payment routing. Ratchet is a different shape: the unit of value is a <em>capability lifecycle</em> — grant, spend, revoke — over one shared budget, not an invoice lifecycle. The originality criterion in this hackathon carries the highest weight, so prior art was checked before the design was chosen.</p>
+</main>
+<div id="site-footer"></div>
+<script src="/shared.js"></script>
+<script>(function(){ RatchetSite.mount("how"); })();</script>
+</body>
+</html>

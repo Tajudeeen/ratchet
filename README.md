@@ -29,8 +29,8 @@ A ratchet only turns one way: every `spend()` clicks the shared budget down one 
 - Explorer: https://explorer-test.qday.info/address/0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36
 
 **NOT VERIFIED YET — DO NOT CLAIM:**
-- No UI/CLI verifier yet (M3 pending). Demo video not recorded.
-- Explorer contract verifier is broken upstream — source is pinned by commit hash here.
+- Demo video not recorded. Explorer source identity is pinned by repo + commit, not the
+  broken upstream verifier.
 - No mainnet deployment; no production claim. The test wallets used in the proof are
   throwaway. The deployer key was pasted in a chat once — rotate that wallet after the event.
 
@@ -46,12 +46,22 @@ Circle (2026-11-19): "A prompt that says 'stay within budget' expresses intent, 
 - `spend()` revalidates everything on-chain, decrements atomically, transfers tUSD8, emits `PaymentSettled`.
 - Owner can `revoke()` instantly; `paymentId` is single-use (idempotent retries).
 
+## Site (multi-page, no build step)
+
+Four pages with shared header/footer and editorial paper design:
+`index.html` (splash + live teaser), `explorer.html` (live RPC + EIP-6963 wallet
+picker), `how-it-works.html` (mechanism + boundaries), `proof.html` (all hashes).
+Serve locally with `npm run site` → http://127.0.0.1:8777/index.html
+(the site uses absolute paths, so serve from the repo root, not `site/`).
+
 ## Build / verify locally
 
 ```bash
 npm install
 npx hardhat compile
 npx hardhat test
+npm run site              # serve the multi-page site locally
+node scripts/verify.cjs <txHash>   # reproduce any claim from chain state
 ```
 
 Deploy to Aevum (requires `DEPLOYER_PRIVATE_KEY` env, funded test wallet):

@@ -7,6 +7,7 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
+    "site": "python3 -m http.server 8777",
     "deploy:aevum": "hardhat run scripts/deploy.cjs --network aevum"
   },
   "devDependencies": {
