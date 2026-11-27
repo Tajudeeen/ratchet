@@ -1,7 +1,14 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  const signers = await ethers.getSigners();
+  if (!process.env.DEPLOYER_PRIVATE_KEY || signers.length === 0) {
+    throw new Error(
+      "DEPLOYER_PRIVATE_KEY is not set. In your own terminal: export DEPLOYER_PRIVATE_KEY=0x... " +
+      "(for wallet 0x541291139b59570D1CD5D0E64df217b3F6efd7c8). Never paste a key into chat."
+    );
+  }
+  const [deployer] = signers;
   const address = await deployer.getAddress();
   const expected = "0x541291139b59570D1CD5D0E64df217b3F6efd7c8";
   if (address.toLowerCase() !== expected.toLowerCase()) {
