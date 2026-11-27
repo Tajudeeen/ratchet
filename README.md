@@ -46,6 +46,19 @@ Circle (2026-11-19): "A prompt that says 'stay within budget' expresses intent, 
 - `spend()` revalidates everything on-chain, decrements atomically, transfers tUSD8, emits `PaymentSettled`.
 - Owner can `revoke()` instantly; `paymentId` is single-use (idempotent retries).
 
+## Agent integration (the product layer)
+
+`Ratchet.sol` is the primitive; `sdk/` + `cli/` are how an agent developer uses it:
+no gas needed for the agent key (sign-only), a funded relayer broadcasts, and every
+rule failure is a named on-chain error. See `docs/INTEGRATION.md`.
+
+```bash
+npm run ratchet -- budget                       # live shared budget
+npm run ratchet -- status 0x<sessionId>         # live on-chain session state
+npm run ratchet -- sign 0x<Sid> 0x<Agent> 0x<Payee> 0.2 0x<Pid>
+npm run ratchet -- verify 0x<txHash>            # decode receipt from chain state
+```
+
 ## Site (multi-page, no build step)
 
 Four pages with shared header/footer and a printed-receipt visual language:
