@@ -51,8 +51,11 @@ Circle (2026-11-19): "A prompt that says 'stay within budget' expresses intent, 
 Four pages with shared header/footer and editorial paper design:
 `index.html` (splash + live teaser), `explorer.html` (live RPC + EIP-6963 wallet
 picker), `how-it-works.html` (mechanism + boundaries), `proof.html` (all hashes).
+
+**Canonical live site:** https://tajudeeen.github.io/ratchet/
+(GitHub Pages, `gh-pages` branch; GitHub About → Website set to the same URL.)
 Serve locally with `npm run site` → http://127.0.0.1:8777/index.html
-(the site uses absolute paths, so serve from the repo root, not `site/`).
+(the site uses relative paths, so it works from the repo root and the `/ratchet/` Pages subpath).
 
 ## Build / verify locally
 
