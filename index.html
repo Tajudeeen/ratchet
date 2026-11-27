@@ -12,40 +12,26 @@
 <body>
 <div id="site-header"></div>
 <main>
-  <section class="wrap spash">
+  <section class="wrap" style="padding:76px 0 24px">
     <p class="eyebrow">Aevum Builder Challenge #1 · testnet · chain 44005</p>
     <h1>A budget that<br>rachets one way.</h1>
     <p class="lede">An AI agent can hold a key. It cannot hold a promise. “Stay within budget” in a prompt enforces nothing — so Ratchet enforces it in a contract: every payment clicks the shared budget down one notch, and it never clicks back.</p>
-    <p style="margin:26px 0"><a class="btn" href="explorer.html">Open the live explorer →</a> <a class="btn secondary" href="how-it-works.html">How it works</a></p>
+    <p style="margin:26px 0"><a class="btn" href="audit-tape.html">Read the audit tape →</a> <a class="btn secondary" href="how-it-works.html">How it works</a></p>
+  </section>
 
-    <div class="panel">
-      <p class="eyebrow" style="margin-bottom:14px"><span class="live-dot"></span>Live from Aevum right now</p>
-      <div class="grid-3">
-        <div class="stat"><b id="s-remain">…</b><span>tUSD8 left in shared budget</span></div>
-        <div class="stat"><b id="s-contract">44005</b><span>chain id · Aevum testnet</span></div>
-        <div class="stat"><b id="s-token">6</b><span>tUSD8 decimals · on-chain</span></div>
+  <section class="wrap" style="padding-bottom:20px">
+    <div class="receipt" style="max-width:680px">
+      <div class="receipt-head"><div class="mark">RATCHET</div><div class="sub">sample line · aevum testnet</div></div>
+      <div class="receipt-body" style="padding-top:18px">
+        <div class="line"><div class="n">04</div><div class="what"><b>PAY · 0.20 tUSD8 → payee</b><small>Signed by an agent whose session caps the spend.</small><div class="hash">0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec</div></div><div><span class="stamp ok">settled</span></div></div>
+        <div class="line"><div class="n">06</div><div class="what"><b>RETRY · same payment ID</b><small>Same intent, second attempt.</small></div><div><span class="stamp">refused</span></div></div>
       </div>
-      <hr class="rule">
-      <p class="mono" style="font-size:.78rem;margin:0">Contract <span class="addr" id="s-address">0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36</span></p>
+      <div class="receipt-foot">ten lines on the full tape &nbsp;·&nbsp; <a href="audit-tape.html">open the record →</a></div>
     </div>
-
-    <div class="ticker" style="margin-top:26px">LIVE PROOF · deploy 0xe288823e…50515e · fund 0x242aa33e…5e80c · approve 0x51edfbf2…e59ec · block_duplicate &amp; block_revoked reverted on-chain · <a href="proof.html">all evidence →</a></div>
   </section>
 </main>
 <div id="site-footer"></div>
 <script src="shared.js"></script>
-<script>
-(function(){
-  RatchetSite.mount("index");
-  var S = RatchetSite;
-  Promise.all([
-    S.call(S.CONTRACT, S.SEL.remainingBudget).then(function(v){ return S.tUSD(S.u256(v)); }).catch(function(){ return "offline"; }),
-    S.call(S.TUSD8, "0x313ce567").then(function(v){ return S.hexToU32(v); }).catch(function(){ return "?"; })
-  ]).then(function(r){
-    document.getElementById("s-remain").textContent = r[0];
-    document.getElementById("s-token").textContent = r[1];
-  }).catch(function(){ /* keep placeholders honest */ });
-})();
-</script>
+<script>(function(){ RatchetSite.mount("index"); })();</script>
 </body>
 </html>

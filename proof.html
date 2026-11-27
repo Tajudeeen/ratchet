@@ -2,63 +2,42 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Proof — Ratchet</title>
+<title>Source & proof — Ratchet</title>
 <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div id="site-header"></div>
 <main class="wrap" style="padding-top:46px">
-  <p class="eyebrow">Evidence · all hashes independently re-read by raw JSON-RPC on 27 Nov 2026</p>
-  <h1>Proof, not description.</h1>
-  <p class="lede">Contract <code id="p-contract">0x2B38…AB36</code> on Aevum testnet, chain 44005. Every successful step below returned receipt status <code>0x1</code>; every block reverted with a named custom error. Click any hash to inspect it on the public explorer.</p>
+  <p class="eyebrow">Provenance · why the tape can be trusted</p>
+  <h1>Source &amp; proof.</h1>
+  <p class="lede">The <a href="audit-tape.html">audit tape</a> prints the record. This page explains how to check that the record is real: the deployed source, the exact commit, and one command that re-reads any line from chain state.</p>
 
-  <h2 style="margin-top:34px">Deployment</h2>
-  <table>
-    <tr><th>Artifact</th><th>Value</th></tr>
-    <tr><td>Contract address</td><td><a id="p-c-link" href="#">0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36</a></td></tr>
-    <tr><td>Deploy transaction</td><td><a href="https://explorer-test.qday.info/tx/0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e">0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e</a></td></tr>
-    <tr><td>On-chain code size</td><td>4095 bytes (eth_getCode)</td></tr>
-    <tr><td>token() / owner()</td><td>tUSD8 / 0x5412…7c8 — both verified by eth_call</td></tr>
-  </table>
+  <div class="panel" style="margin:30px 0">
+    <h2>The artifact</h2>
+    <div class="tape-row"><div class="k">Repository</div><div class="v"><a href="https://github.com/Tajudeeen/ratchet">github.com/Tajudeeen/ratchet</a> · public, MIT</div></div>
+    <div class="tape-row"><div class="k">Contract</div><div class="v">0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36</div></div>
+    <div class="tape-row"><div class="k">Deploy tx</div><div class="v"><a href="https://explorer-test.qday.info/tx/0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e">0xe288823e…50515e</a></div></div>
+    <div class="tape-row"><div class="k">On-chain code</div><div class="v">4095 bytes · <code>eth_getCode</code>, 27 Nov 2026</div></div>
+    <div class="tape-row"><div class="k">Bindings</div><div class="v"><code>token()</code> = tUSD8 · <code>owner()</code> = 0x541291…fd7c8</div></div>
+    <div class="tape-row"><div class="k">Machine log</div><div class="v"><a href="https://github.com/Tajudeeen/ratchet/blob/main/evidence/m2-onchain.json">evidence/m2-onchain.json</a></div></div>
+  </div>
 
-  <h2>Four-beat proof sequence</h2>
-  <table>
-    <tr><th>Beat</th><th>Outcome</th><th>Transaction</th></tr>
-    <tr><td>Fund shared pot (1 tUSD8)</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0x242aa33ee14300089b6e9d2b1588e0196401ce17c45dd333e1067700e185e80c">0x242aa33e…5e80c</a></td></tr>
-    <tr><td>Grant session 1</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0x693a7f44d21a4b7640d43ddf96794d78d583951e01e1c60bab743332127555dd">0x693a7f44…555dd</a></td></tr>
-    <tr><td>Grant session 2</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0xc430808213be0c6a1593c3390bb73e5903687315126121c78072f4185dec39af">0xc4308082…c39af</a></td></tr>
-    <tr><td>Agent 1 pays 0.2 tUSD8</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec">0x51edfbf2…e59ec</a></td></tr>
-    <tr><td>Agent 2 pays 0.2 tUSD8</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0xc15bdc5c3e3a44bcea40bd4f067279ac2913179384b510b567f611577c170c61">0xc15bdc5c…70c61</a></td></tr>
-    <tr><td>Retry with same paymentId</td><td class="block">BLOCK · PAYMENT_ALREADY_SETTLED</td><td>reverted</td></tr>
-    <tr><td>Revoke session 1</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0x4333b25293fad52e487e1b77694e8c01dff4735953b675ea2a0119fa0577ebba">0x4333b252…57ebba</a></td></tr>
-    <tr><td>Pay from revoked session</td><td class="block">BLOCK · SESSION_REVOKED</td><td>reverted</td></tr>
-    <tr><td>Drain shared pot (0.6 tUSD8)</td><td class="ok">SUCCESS</td><td><a href="https://explorer-test.qday.info/tx/0xe0c498828b1f8efb6d07c88ff51f5de5550a39ac079ac0817415dc06a1b31bd4">0xe0c4988…1b31bd4</a></td></tr>
-    <tr><td>Pay after pot is empty</td><td class="block">BLOCK · BUDGET_EXHAUSTED</td><td>reverted</td></tr>
-  </table>
-  <p class="mono" style="font-size:.8rem">Final on-chain state: <code>remainingBudget() = 0</code>; payee received <code>2680000</code> base units (2.68 tUSD8). Full machine-readable log: <a href="https://github.com/Tajudeeen/ratchet/blob/main/evidence/m2-onchain.json">evidence/m2-onchain.json</a>.</p>
-
-  <h2 style="margin-top:34px">Reproduce from a fresh clone</h2>
+  <h2>Reproduce a line</h2>
+  <p>One command, from a fresh clone. It reads the transaction receipt, decodes the contract events, and prints the live <code>remainingBudget()</code> — no local deployment state, no trust in this site.</p>
   <pre><span class="hl"># local unit suite — 8 passing</span>
-npm install
-npm run test
+npm install &amp;&amp; npm run test
 
-<span class="hl"># re-verify any documented claim from chain state</span>
+<span class="hl"># re-read line 04 of the tape from Aevum chain state</span>
 node scripts/verify.cjs 0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec</pre>
-  <p class="mono" style="font-size:.78rem">Output includes chain id, receipt status, decoded PaymentSettled events, current remainingBudget and the explorer URL. No local deployment state needed.</p>
+  <p class="mono" style="font-size:.78rem">Output: chain id, receipt status, decoded <code>PaymentSettled</code> event, current budget, tUSD8 decimals and the explorer URL.</p>
 
-  <h2>Sources for the problem statement</h2>
-  <p class="mono" style="font-size:.8rem">Circle, <em>How AI Agents Hold and Spend Money</em>, 19 Nov 2026 — prompt budgets, shared budgets, retry double-charges. EIP-3009 / ERC-7715 / x402 facilitator docs — signed authorizations, permission requests, idempotency. Event brief — <a href="https://qday.io/builder-challenge">qday.io/builder-challenge</a>, scoring weights and testnet parameters.</p>
+  <h2 style="margin-top:34px">Why this shape</h2>
+  <p>Problem sources are primary and dated: Circle, <em>How AI Agents Hold and Spend Money</em> (19 Nov 2026) — “A prompt that says ‘stay within budget’ expresses intent, but nothing enforces it”; EIP-3009 / ERC-7715 / x402 facilitator docs on signed authorizations and idempotency; the official <a href="https://qday.io/builder-challenge">Aevum challenge brief</a> for the scoring weights and testnet parameters. Two competing invoice-escrow repos were checked before design, so the chosen shape — a capability lifecycle over one shared budget — is not a reskin.</p>
 
-  <div class="note">Not claimed: no external audit, no mainnet deployment, no uptime guarantee, and no explorer source verification (the Aevum explorer verifier is non-functional; we publish the repo and exact commit instead). The deployer wallet used here is a development wallet whose key was shared in a chat — rotate it before any real use.</div>
+  <div class="note">Not claimed: no external audit, no mainnet deployment, no uptime guarantee, and no explorer source verification (Aevum's verifier is non-functional — repo + exact commit pin the source). The deployer wallet is a development wallet whose key was shared in a chat; rotate it before any real use.</div>
 </main>
 <div id="site-footer"></div>
 <script src="shared.js"></script>
-<script>
-(function(){
-  RatchetSite.mount("proof");
-  var a = document.getElementById("p-c-link");
-  a.href = RatchetSite.EXPLORER + "/address/" + RatchetSite.CONTRACT;
-})();
-</script>
+<script>(function(){ RatchetSite.mount("proof"); })();</script>
 </body>
 </html>
