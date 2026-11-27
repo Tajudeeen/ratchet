@@ -1,0 +1,19 @@
+{
+  "name": "ratchet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SCOPE — scoped, expiring, revocable tUSD8 payment sessions for AI agents on Aevum (chain 44005)",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:aevum": "hardhat run scripts/deploy.cjs --network aevum"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.8",
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "chai": "4.5.0",
+    "ethers": "6.15.0",
+    "hardhat": "2.26.5"
+  }
+}
