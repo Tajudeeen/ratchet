@@ -52,7 +52,14 @@
 
     </div>
     <div class="receipt-total"><span>REMAINING BUDGET</span><span>0.00 tUSD8</span></div>
-    <div class="receipt-foot">ENDING BALANCE 0000000 &nbsp;·&nbsp; PAYEE RECEIVED 2.68 tUSD8<br><div class="barcode"></div>verify any line: <code>node scripts/verify.cjs &lt;hash&gt;</code></div>
+    <div class="receipt-foot">ENDING BALANCE 0000000 &nbsp;·&nbsp; PAYEE RECEIVED 2.68 tUSD8<br><div class="barcode"></div>verify any line: <code>npm run ratchet -- verify &lt;hash&gt;</code></div>
+  </div>
+
+  <div class="panel">
+    <h2>How to test it</h2>
+    <p><b>No setup:</b> every settled line above links to its transaction on the public Aevum explorer. Click one.</p>
+    <p><b>Fresh clone, no wallet:</b> <code>npm install &amp;&amp; npm run test</code> (15 tests), then <code>npm run ratchet -- verify 0x5198b40d…</code> re-reads a payment from chain state.</p>
+    <p><b>Build on it:</b> the <a href="https://github.com/Tajudeeen/ratchet/blob/main/docs/INTEGRATION.md">SDK integration guide</a> shows an agent signing a scoped payment and a relayer broadcasting it. Testnet only, no audit.</p>
   </div>
 
   <div class="note">What this tape does not show: no mainnet deployment, no external audit, and no explorer source verification (the Aevum verifier is non-functional — we publish the repo and exact commit). Reverted transactions have no hash to click; their named errors are asserted by the committed Hardhat suite and reproducible with <code>npm run test</code>.</div>

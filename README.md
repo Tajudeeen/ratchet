@@ -72,14 +72,31 @@ No explorer, no live-data instrument — the durable record is the demo.
 Serve locally with `npm run site` → http://127.0.0.1:8777/index.html
 (the site uses relative paths, so it works from the repo root and the `/ratchet/` Pages subpath).
 
+## Three ways to test / use Ratchet
+
+1. **Judge, no setup:** open https://tajudeeen.github.io/ratchet/audit-tape.html —
+   the full proof sequence is presented as a printed receipt, with every settled
+   tx hash linked to the public explorer.
+2. **Verifier, fresh clone, no key:** run the `npm run test` / `ratchet verify` /
+   `ratchet status` commands below. They read the deployed contract and published
+   receipts from chain state. No wallet or tokens needed.
+3. **Integrator:** use `sdk/` + `cli/` as documented in `docs/INTEGRATION.md`.
+   An agent signs EIP-712 typed data with its own key (no gas); a funded relayer
+   broadcasts `spend()`. To deploy your own instance, claim tQDAY + tUSD8 from
+   the Aevum faucet and run `npm run deploy:aevum` with your own key in `.env`.
+
 ## Build / verify locally
 
 ```bash
 npm install
-npx hardhat compile
-npx hardhat test
-npm run site              # serve the multi-page site locally
-node scripts/verify.cjs <txHash>   # reproduce any claim from chain state
+npm run test               # 15 passing: 8 contract + 7 SDK
+npm run site               # serve the audit-tape site at http://127.0.0.1:8777
+
+# Verify a published claim directly from Aevum chain state (no local deployment needed)
+npm run ratchet -- verify 0x5198b40dbaa635405e4bcd442f664ad51d81edb3f7c115bc94b4e9cadc310649
+
+# Read live on-chain state for any published session
+npm run ratchet -- status 0x6ee10c27a6693d9423aeb88fbab6e9d86e352ef899adeecfd018a865dd923053
 ```
 
 Deploy to Aevum (requires `DEPLOYER_PRIVATE_KEY` env, funded test wallet):
