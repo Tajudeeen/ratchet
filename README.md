@@ -25,7 +25,7 @@ A ratchet only turns one way: every `spend()` clicks the shared budget down one 
   `owner()` = 0x5412...7c8).
 - Live proof sequence (`evidence/m2-onchain.json`): FUND, GRANT x3, APPROVE x2,
   REVOKE, DRAIN all succeeded; BLOCK_DUP_ID, BLOCK_REVOKED, BLOCK_EMPTY all reverted
-  on-chain. Final `remainingBudget()` = 0; payee received 2.68 tUSD8.
+  on-chain. At the time of that tape, `remainingBudget()` = 0; payee received 2.68 tUSD8. Later SDK proof runs re-funded the contract (current value is always readable with `npm run ratchet -- budget`).
 - Explorer: https://explorer-test.qday.info/address/0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36
 
 **NOT VERIFIED YET — DO NOT CLAIM:**
@@ -63,7 +63,7 @@ npm run ratchet -- verify 0x<txHash>            # decode receipt from chain stat
 
 Four pages with shared header/footer and a printed-receipt visual language:
 `index.html` (typographic entry + sample tape line), `audit-tape.html` (the main
-surface: ten ruled lines, five SETTLED and three REFUSED stamps, real hashes),
+surface: ten ruled lines, seven SETTLED and three REFUSED stamps, real hashes),
 `how-it-works.html` (mechanism + boundaries), `proof.html` (provenance + repro commands).
 No explorer, no live-data instrument — the durable record is the demo.
 
