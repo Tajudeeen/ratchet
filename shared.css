@@ -56,6 +56,8 @@ h2{font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1.1;letter-spacing:-.025em;m
 .line .what b{display:block;font-family:var(--serif);font-size:1rem;letter-spacing:-.01em}
 .line .what small{display:block;color:var(--muted);font-size:.72rem;line-height:1.45;margin-top:3px}
 .hash{font-size:.7rem;word-break:break-all;color:var(--muted)}
+.hash a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink)}
+.hash a:hover{background:var(--surface);color:var(--ink);border-bottom-style:solid}
 .stamp{
   display:inline-block;border:3px double var(--stamp);color:var(--stamp);
   font-family:var(--mono);font-weight:700;font-size:.68rem;letter-spacing:.12em;
