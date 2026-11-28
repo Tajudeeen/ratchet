@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audit tape — Ratchet</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main class="wrap" style="padding-top:46px">
+  <p class="eyebrow">The record · read left to right like a till receipt</p>
+  <h1>Audit tape.</h1>
+  <p class="lede">Seven settles. Three refusals. A snapshot of the contract as it stood on 27 November 2026 — every line below was verified by raw JSON-RPC on Aevum testnet, chain 44005. Later SDK proof calls changed the live balance. Refusals are not screenshots — they are on-chain reverts with named errors.</p>
+
+  <div class="receipt" style="margin:34px 0 0">
+    <div class="receipt-head">
+      <div class="mark">RATCHET</div>
+      <div class="sub">shared budget · agent sessions · testnet</div>
+      <div class="barcode"></div>
+      <div class="sub">chain 44005 · contract 0x2B38…AB36</div>
+    </div>
+    <div class="receipt-meta">
+      <div><span>Terminal</span>Aevum / QDay testnet</div>
+      <div><span>Deploy tx</span>0xe288823e…50515e</div>
+      <div><span>Token</span>tUSD8 · 6 decimals</div>
+      <div><span>Owner</span>0x541291…fd7c8</div>
+    </div>
+    <div class="receipt-body">
+
+      <div class="line"><div class="n">01</div><div class="what"><b>FUND · 1.00 tUSD8</b><small>Owner loads the shared pot. Allowance is exact and self-zeroes in the same call.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0x242aa33ee14300089b6e9d2b1588e0196401ce17c45dd333e1067700e185e80c" target="_blank" rel="noopener">0x242aa33ee14300089b6e9d2b1588e0196401ce17c45dd333e1067700e185e80c</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">02</div><div class="what"><b>GRANT · session A</b><small>Agent key bound to 0.2 per call / 0.5 total, valid one hour.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0x693a7f44d21a4b7640d43ddf96794d78d583951e01e1c60bab743332127555dd" target="_blank" rel="noopener">0x693a7f44d21a4b7640d43ddf96794d78d583951e01e1c60bab743332127555dd</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">03</div><div class="what"><b>GRANT · session B</b><small>Second agent, same shared pot, independent cap.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0xc430808213be0c6a1593c3390bb73e5903687315126121c78072f4185dec39af" target="_blank" rel="noopener">0xc430808213be0c6a1593c3390bb73e5903687315126121c78072f4185dec39af</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">04</div><div class="what"><b>PAY · 0.20 tUSD8 → payee</b><small>Signed EIP-712 payment by agent A. budget clicks down.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec" target="_blank" rel="noopener">0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">05</div><div class="what"><b>PAY · 0.20 tUSD8 → payee</b><small>Signed payment by agent B. Same pot, atomic decrement.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0xc15bdc5c3e3a44bcea40bd4f067279ac2913179384b510b567f611577c170c61" target="_blank" rel="noopener">0xc15bdc5c3e3a44bcea40bd4f067279ac2913179384b510b567f611577c170c61</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">06</div><div class="what"><b>RETRY · same payment ID</b><small>The client re-sends payment 04 after a simulated timeout. The contract remembers the ID.</small></div><div><span class="stamp">refused</span></div></div>
+      <div class="line" style="padding-top:0;border:0"><div class="n"></div><div class="what"><code>PAYMENT_ALREADY_SETTLED</code></div><div></div></div>
+
+      <div class="line"><div class="n">07</div><div class="what"><b>REVOKE · session A</b><small>Owner kills the session. No new key can take its place.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0x4333b25293fad52e487e1b77694e8c01dff4735953b675ea2a0119fa0577ebba" target="_blank" rel="noopener">0x4333b25293fad52e487e1b77694e8c01dff4735953b675ea2a0119fa0577ebba</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">08</div><div class="what"><b>PAY · from revoked session</b><small>Agent A tries again with a valid signature. Revocation outranks the signature.</small></div><div><span class="stamp">refused</span></div></div>
+      <div class="line" style="padding-top:0;border:0"><div class="n"></div><div class="what"><code>SESSION_REVOKED</code></div><div></div></div>
+
+      <div class="line"><div class="n">09</div><div class="what"><b>DRAIN · 0.60 tUSD8</b><small>Session C empties the remaining shared pot in one transaction.</small><div class="hash"><a href="https://explorer-test.qday.info/tx/0xe0c498828b1f8efb6d07c88ff51f5de5550a39ac079ac0817415dc06a1b31bd4" target="_blank" rel="noopener">0xe0c498828b1f8efb6d07c88ff51f5de5550a39ac079ac0817415dc06a1b31bd4</a></div></div><div><span class="stamp ok">settled</span></div></div>
+
+      <div class="line"><div class="n">10</div><div class="what"><b>PAY · 0.000001 tUSD8</b><small>One base unit more than exists. The budget has no overdraft.</small></div><div><span class="stamp">refused</span></div></div>
+      <div class="line" style="padding-top:0;border:0"><div class="n"></div><div class="what"><code>BUDGET_EXHAUSTED</code></div><div></div></div>
+
+    </div>
+    <div class="receipt-total"><span>REMAINING BUDGET AT PRINTING</span><span>0.00 tUSD8</span></div>
+    <div class="receipt-foot">BALANCE AT PRINTING 0000000 &nbsp;·&nbsp; PAYEE RECEIVED 2.68 tUSD8<br><div class="barcode"></div>verify any line: <code>npm run ratchet -- verify &lt;hash&gt;</code></div>
+  </div>
+
+  <div class="panel">
+    <h2>How to test it</h2>
+    <p><b>No setup:</b> every settled line above links to its transaction on the public Aevum explorer. Click one.</p>
+    <p><b>Fresh clone, no wallet:</b> <code>npm install &amp;&amp; npm run test</code> (15 tests), then <code>npm run ratchet -- verify 0x5198b40d…</code> re-reads a payment from chain state.</p>
+    <p><b>Build on it:</b> the <a href="https://github.com/Tajudeeen/ratchet/blob/main/docs/INTEGRATION.md">SDK integration guide</a> shows an agent signing a scoped payment and a relayer broadcasting it. Testnet only, no audit.</p>
+  </div>
+
+  <div class="note">What this tape does not show: no mainnet deployment, no external audit, and no explorer source verification (the Aevum verifier is non-functional — we publish the repo and exact commit). Reverted transactions have no hash to click; their named errors are asserted by the committed Hardhat suite and reproducible with <code>npm run test</code>.</div>
+</main>
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+<script>(function(){ RatchetSite.mount("tape"); })();</script>
+</body>
+</html>

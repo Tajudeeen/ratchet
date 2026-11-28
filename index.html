@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ratchet — scoped agent payments on Aevum</title>
+<meta name="description" content="One shared tUSD8 budget; agent sessions that are capped, expiring and revocable, enforced on-chain. Aevum Builder Challenge #1.">
+<meta property="og:url" content="https://tajudeeen.github.io/ratchet/">
+<meta property="og:title" content="Ratchet — scoped agent payments on Aevum">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+  <section class="wrap" style="padding:76px 0 24px">
+    <p class="eyebrow">Aevum Builder Challenge #1 · testnet · chain 44005</p>
+    <h1>A budget that<br>rachets one way.</h1>
+    <p class="lede">An AI agent can hold a key. It cannot hold a promise. “Stay within budget” in a prompt enforces nothing — so Ratchet enforces it in a contract: every payment clicks the shared budget down one notch, and it never clicks back.</p>
+    <p style="margin:26px 0"><a class="btn" href="audit-tape.html">Read the audit tape →</a> <a class="btn secondary" href="how-it-works.html">How it works</a></p>
+  </section>
+
+  <section class="wrap" style="padding-bottom:20px">
+    <div class="receipt" style="max-width:680px">
+      <div class="receipt-head"><div class="mark">RATCHET</div><div class="sub">sample line · aevum testnet</div></div>
+      <div class="receipt-body" style="padding-top:18px">
+        <div class="line"><div class="n">04</div><div class="what"><b>PAY · 0.20 tUSD8 → payee</b><small>Signed by an agent whose session caps the spend.</small><div class="hash">0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec</div></div><div><span class="stamp ok">settled</span></div></div>
+        <div class="line"><div class="n">06</div><div class="what"><b>RETRY · same payment ID</b><small>Same intent, second attempt.</small></div><div><span class="stamp">refused</span></div></div>
+      </div>
+      <div class="receipt-foot">ten lines on the full tape &nbsp;·&nbsp; <a href="audit-tape.html">open the record →</a></div>
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+<script>(function(){ RatchetSite.mount("index"); })();</script>
+</body>
+</html>

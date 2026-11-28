@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Source & proof — Ratchet</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main class="wrap" style="padding-top:46px">
+  <p class="eyebrow">Provenance · why the tape can be trusted</p>
+  <h1>Source &amp; proof.</h1>
+  <p class="lede">The <a href="audit-tape.html">audit tape</a> prints the record. This page explains how to check that the record is real: the deployed source, the exact commit, and one command that re-reads any line from chain state.</p>
+
+  <div class="panel" style="margin:30px 0">
+    <h2>The artifact</h2>
+    <div class="tape-row"><div class="k">Repository</div><div class="v"><a href="https://github.com/Tajudeeen/ratchet">github.com/Tajudeeen/ratchet</a> · public, MIT</div></div>
+    <div class="tape-row"><div class="k">Contract</div><div class="v">0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36</div></div>
+    <div class="tape-row"><div class="k">Deploy tx</div><div class="v"><a href="https://explorer-test.qday.info/tx/0xe288823e3cdafaa104ef98828e18a50759dc4d5d8227e3efc6a6d5a9ea50515e">0xe288823e…50515e</a></div></div>
+    <div class="tape-row"><div class="k">On-chain code</div><div class="v">4095 bytes · <code>eth_getCode</code>, 27 Nov 2026</div></div>
+    <div class="tape-row"><div class="k">Bindings</div><div class="v"><code>token()</code> = tUSD8 · <code>owner()</code> = 0x541291…fd7c8</div></div>
+    <div class="tape-row"><div class="k">Machine log</div><div class="v"><a href="https://github.com/Tajudeeen/ratchet/blob/main/evidence/m2-onchain.json">evidence/m2-onchain.json</a></div></div>
+  </div>
+
+  <h2>Reproduce a line</h2>
+  <p>One command, from a fresh clone. It reads the transaction receipt, decodes the contract events, and prints the live <code>remainingBudget()</code> — no local deployment state, no trust in this site.</p>
+  <pre><span class="hl"># local unit suite — 8 passing</span>
+npm install &amp;&amp; npm run test
+
+<span class="hl"># re-read line 04 of the tape from Aevum chain state</span>
+npm run ratchet -- verify 0x51edfbf20500d8bef9307931e00b1e9b65364bfb83a3325197196eeada6e59ec</pre>
+  <p class="mono" style="font-size:.78rem">Output: chain id, receipt status, decoded <code>PaymentSettled</code> event, current budget, tUSD8 decimals and the explorer URL.</p>
+
+  <h2 style="margin-top:34px">Why this shape</h2>
+  <p>Problem sources are primary and dated: Circle, <em>How AI Agents Hold and Spend Money</em> (19 Nov 2026) — “A prompt that says ‘stay within budget’ expresses intent, but nothing enforces it”; EIP-3009 / ERC-7715 / x402 facilitator docs on signed authorizations and idempotency; the official <a href="https://qday.io/builder-challenge">Aevum challenge brief</a> for the scoring weights and testnet parameters. Two competing invoice-escrow repos were checked before design, so the chosen shape — a capability lifecycle over one shared budget — is not a reskin.</p>
+
+  <div class="note">Not claimed: no external audit, no mainnet deployment, no uptime guarantee, and no explorer source verification (Aevum's verifier is non-functional — repo + exact commit pin the source). The deployer wallet is a development wallet whose key was shared in a chat; rotate it before any real use.</div>
+</main>
+<div id="site-footer"></div>
+<script src="shared.js"></script>
+<script>(function(){ RatchetSite.mount("proof"); })();</script>
+</body>
+</html>
