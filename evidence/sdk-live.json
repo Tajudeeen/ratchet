@@ -1,0 +1,53 @@
+{
+  "network": "aevum",
+  "chainId": 44005,
+  "contract": "0x2B38CC9b84Bd3a568ccc7817B10Dc98C8ABdAB36",
+  "owner": "0x541291139b59570D1CD5D0E64df217b3F6efd7c8",
+  "agent": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "payee": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+  "note": "All SUCCESS hashes independently re-read by raw eth_getTransactionReceipt on 2026-11-28 (status 0x1). BLOCK rows are estimateGas reverts with the named error decoded from the returned selector; reverted sends have no hash.",
+  "steps": [
+    {
+      "step": "FUND",
+      "result": "SUCCESS",
+      "hash": "0x794fcfe8a3f76c778d1f23b950dc4e965b1fa1df480f841e36d22ecb79a85422",
+      "block": "0x4226ca"
+    },
+    {
+      "step": "GRANT",
+      "result": "SUCCESS",
+      "hash": "0x883779d74e671e1c0d9572653de62b3f1d243ca96b4e22cbe05fc49ccfb2d772",
+      "block": "0x4226d1"
+    },
+    {
+      "step": "SDK_PAY",
+      "result": "SUCCESS",
+      "hash": "0x5198b40dbaa635405e4bcd442f664ad51d81edb3f7c115bc94b4e9cadc310649",
+      "block": "0x4226d4"
+    },
+    {
+      "step": "SDK_DUP_ID",
+      "result": "BLOCK",
+      "reason": "PAYMENT_ALREADY_SETTLED"
+    },
+    {
+      "step": "REVOKE",
+      "result": "SUCCESS",
+      "hash": "0xb72b38ec5af2e416ba2dd916b13e35a5a3ad7ebc7999e55a9a1fd729f6f66d70",
+      "block": "0x4226dc"
+    },
+    {
+      "step": "SDK_REVOKED",
+      "result": "BLOCK",
+      "reason": "SESSION_REVOKED"
+    }
+  ],
+  "session": {
+    "agent": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "perCallCap": "0.5",
+    "totalCap": "1.0",
+    "spent": "0.5",
+    "revoked": true
+  },
+  "remainingBudget": "3500000"
+}

@@ -100,6 +100,24 @@ const r = await ratchet.receipt(txHash);
 The SDK does not trust the client's own logs: it decodes only logs emitted by
 the pinned contract address.
 
+## Live proof of the SDK layer (2026-11-28)
+
+`scripts/sdk-live.cjs` drove the SDK itself on Aevum testnet: FUND, GRANT,
+`SDK_PAY` (agent signed, owner broadcast as relayer), `SDK_DUP_ID` blocked with
+`PAYMENT_ALREADY_SETTLED`, REVOKE, and `SDK_REVOKED` blocked with
+`SESSION_REVOKED`. The four success hashes were independently re-read via raw
+`eth_getTransactionReceipt` (status 0x1). Evidence: `evidence/sdk-live.json`.
+The product-layer CLI re-decoded the SDK payment:
+
+```bash
+npm run ratchet -- verify 0x5198b40dbaa635405e4bcd442f664ad51d81edb3f7c115bc94b4e9cadc310649
+```
+
+Bugs found and fixed during that run (recorded honestly): a missing ERC-20
+approval before `fund()`; a `validAfter` computed an hour in the future, which
+made every payment fail `SESSION_EXPIRED`; and ethers errors nesting the revert
+selector under `e.data.data`, which hid the named error until decoded.
+
 ## Known limits (honest)
 
 - Aevum testnet only; no mainnet deployment.
