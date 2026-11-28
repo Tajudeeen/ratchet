@@ -51,6 +51,18 @@ Circle (2026-11-19): "A prompt that says 'stay within budget' expresses intent, 
 `Ratchet.sol` is the primitive; `sdk/` + `cli/` are how an agent developer uses it:
 no gas needed for the agent key (sign-only), a funded relayer broadcasts, and every
 rule failure is a named on-chain error. See `docs/INTEGRATION.md`.
+`docs/USE-CASES.md` answers who this is for — including the honest case where it
+should NOT be used (a single agent with its own budget: use Aevum's native
+session-key wallet instead).
+
+Operator commands (need `OWNER_KEY`, a funded Aevum wallet):
+```bash
+npm run ratchet -- fund 2                                   # approve + load shared pot
+npm run ratchet -- grant 0x<Sid> 0x<Agent> 0.2 0.5 24       # per-call/total caps, hours
+npm run ratchet -- revoke 0x<Sid>                           # instant kill switch
+```
+
+Agent commands:
 
 ```bash
 npm run ratchet -- budget                       # live shared budget

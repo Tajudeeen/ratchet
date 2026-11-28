@@ -3,15 +3,19 @@
 /**
  * Ratchet CLI — agent-side payment tool.
  *
+ *   ratchet fund <amount>               owner: load tUSD8 into the shared pot
+ *   ratchet grant <sessionId> <agent> <perCallCap> <totalCap> [hours]
+ *                                       owner: create a scoped session (default 1h)
+ *   ratchet revoke <sessionId>          owner: kill switch, instant
  *   ratchet status <sessionId>          read on-chain session state
  *   ratchet budget                      read shared remaining budget
- *   ratchet build <sessionId> <agent> <payee> <amount> <paymentId> [deadline]
- *                                       build + sign typed data (offline capable)
+ *   ratchet sign <sessionId> <agent> <payee> <amount> <paymentId>
+ *                                       agent signs typed data (no gas needed)
  *   ratchet pay <sessionId> <agent> <payee> <amount> <paymentId>
- *                                       sign with AGENT_KEY, broadcast with RELAYER_KEY
+ *                                       agent signs, relayer broadcasts
  *   ratchet verify <txHash>             decode receipt from chain state
  *
- * Keys come from env only — never from argv. Use a throwaway wallet on testnet.
+ * Keys from env only — never from argv. Use a throwaway wallet on testnet.
  */
 const { ethers } = require('ethers');
 const { createClient } = require('../sdk');
@@ -19,6 +23,9 @@ const { createClient } = require('../sdk');
 function usage() {
   console.log(`Ratchet CLI — scoped agent payments on Aevum (chain 44005)
 
+  ratchet fund   <amount>
+  ratchet grant  <sessionId> <agent> <perCallCap> <totalCap> [hours]
+  ratchet revoke <sessionId>
   ratchet budget
   ratchet status <sessionId>
   ratchet sign <sessionId> <agentAddress> <payeeAddress> <amount> <paymentId>
@@ -26,8 +33,9 @@ function usage() {
   ratchet verify <txHash>
 
 Env:
-  AGENT_KEY     private key of the bound agent (sign only; no gas needed)
-  RELAYER_KEY   funded private key that broadcasts spend()  (pay command)
+  OWNER_KEY     owner/treasury key: required for fund, grant, revoke
+  AGENT_KEY     bound agent key, signs only (no gas needed): sign, pay
+  RELAYER_KEY   funded broadcaster for pay (defaults to OWNER_KEY)
   RATCHET_RPC   optional RPC override (default Aevum testnet)
 
 Examples:
@@ -49,6 +57,54 @@ async function main() {
   if (!cmd || cmd === '--help' || cmd === '-h') { usage(); return; }
 
   const client = createClient(process.env.RATCHET_RPC ? { rpc: process.env.RATCHET_RPC } : {});
+
+  const ownerSigner = () => new ethers.Wallet(envKey('OWNER_KEY'), client.provider);
+  async function broadcast(label, fn) {
+    const tx = await fn();
+    console.log(label + ' tx:', tx.hash);
+    const rc = await tx.wait();
+    console.log('status:', rc.status, 'block:', Number(rc.blockNumber));
+    console.log('explorer:', client.network.explorer + '/tx/' + tx.hash);
+  }
+
+  if (cmd === 'fund') {
+    const [amount] = args;
+    if (!amount) throw new Error('fund requires <amount> in tUSD8, e.g. 1.5');
+    const owner = ownerSigner();
+    const units = client.toUnits(amount);
+    const tusd = new ethers.Contract(client.network.tusd8, [
+      'function approve(address,uint256) returns (bool)',
+      'function balanceOf(address) view returns (uint256)',
+    ], owner);
+    const bal = await tusd.balanceOf(owner.address);
+    if (bal < units) throw new Error('owner has ' + ethers.formatUnits(bal, 6) + ' tUSD8, needs ' + amount);
+    await broadcast('approve', () => tusd.approve(client.network.ratchet, units));
+    await broadcast('fund', () => client.contract.connect(owner).fund(units));
+    return;
+  }
+
+  if (cmd === 'grant') {
+    const [sid, agent, perCall, total, hours] = args;
+    if (!sid || !agent || !perCall || !total) {
+      throw new Error('grant requires <sessionId> <agent> <perCallCap> <totalCap> [hours]');
+    }
+    const owner = ownerSigner();
+    const now = Math.floor(Date.now() / 1000);
+    const validFor = BigInt(Number(hours || 1) * 3600);
+    if (validFor <= 0n) throw new Error('hours must be positive');
+    await broadcast('grant', () => client.contract.connect(owner).grantSession(
+      sid, agent, client.toUnits(perCall), client.toUnits(total), now - 60, now + validFor
+    ));
+    return;
+  }
+
+  if (cmd === 'revoke') {
+    const [sid] = args;
+    if (!sid) throw new Error('revoke requires <sessionId>');
+    const owner = ownerSigner();
+    await broadcast('revoke', () => client.contract.connect(owner).revoke(sid));
+    return;
+  }
 
   if (cmd === 'budget') {
     await client.assertChain();
@@ -94,7 +150,11 @@ async function main() {
     console.log('payment:', JSON.stringify(built.value, (k, v) => typeof v === 'bigint' ? v.toString() : v));
 
     if (cmd === 'pay') {
-      const relayer = new ethers.Wallet(envKey('RELAYER_KEY'), client.provider);
+      const relayerKey = process.env.RELAYER_KEY || process.env.OWNER_KEY;
+      if (!relayerKey || !/^0x[0-9a-fA-F]{64}$/.test(relayerKey)) {
+        throw new Error('RELAYER_KEY or OWNER_KEY must be set to a funded 0x-prefixed 32-byte key');
+      }
+      const relayer = new ethers.Wallet(relayerKey, client.provider);
       const bal = await client.provider.getBalance(relayer.address);
       if (bal === 0n) throw new Error('relayer has no gas on Aevum');
       const tx = await client.submit(relayer, built);
